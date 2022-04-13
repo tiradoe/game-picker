@@ -1,5 +1,5 @@
-use spreadsheet_ods::Sheet;
 use rand::prelude::SliceRandom;
+use spreadsheet_ods::Sheet;
 
 const EMPTY_FIELD: &str = "-";
 
@@ -27,12 +27,24 @@ impl Clone for Game {
 
 impl Game {
     pub fn random(games: Vec<Game>) -> Game {
-        let game= match games.choose(&mut rand::thread_rng()) {
+        let game = match games.choose(&mut rand::thread_rng()) {
             None => panic!("Error while selecting game"),
             Some(game) => game,
         };
 
         game.clone()
+    }
+
+    pub fn unplayed(games: Vec<Game>) -> Vec<Game> {
+        let mut unplayed: Vec<Game> = Vec::new();
+
+        for game in games {
+            if game.played == "N" {
+                unplayed.push(game);
+            }
+        }
+
+        unplayed
     }
 
     pub fn parse_game(spreadsheet: &Sheet, i: u32) -> Game {

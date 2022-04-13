@@ -34,7 +34,8 @@ fn main() {
         i += 1;
     }
 
-    let random_game = Game::random(games);
+    let unplayed = Game::unplayed(games);
+    let random_game = Game::random(unplayed);
 
     println!("{}", random_game.title);
 }
