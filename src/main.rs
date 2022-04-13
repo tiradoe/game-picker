@@ -1,14 +1,13 @@
 mod game;
 
+use game::Game;
 use std::fs::File;
 use std::io::{BufRead, BufReader};
 use std::path::Path;
-use game::Game;
 
 use spreadsheet_ods::WorkBook;
 
 const EMPTY_FIELD: &str = "-";
-
 
 fn main() {
     let wb = get_workbook();
@@ -50,7 +49,10 @@ fn get_workbook() -> WorkBook {
     let mut path_string: String = String::from("");
 
     for (_index, line) in reader.lines().enumerate() {
-        let line: String = line.expect("Error: Could not open config file.");
+        let line: String = match line {
+            Err(err) => panic!("Could not find config file: {}", err),
+            Ok(data) => data,
+        };
         path_string = line;
     }
 
@@ -62,7 +64,7 @@ fn get_workbook() -> WorkBook {
             Ok(workbook) => workbook,
         }
     } else {
-        panic!("Error: Spreadsheet not found!")
+        panic!("Spreadsheet not found!")
     };
 
     wb
